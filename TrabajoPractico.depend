@@ -1,0 +1,33 @@
+# depslib dependency file v1.0
+1782164509 source:d:\facultad\algoritmos\parciales hechos\parciallista1-12-25\trabajopractico\indice.c
+	"indice.h"
+
+1782164149 d:\facultad\algoritmos\parciales hechos\parciallista1-12-25\trabajopractico\indice.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"arbol.h"
+
+1782165858 source:d:\facultad\algoritmos\parciales hechos\parciallista1-12-25\trabajopractico\arbol.c
+	"arbol.h"
+
+1782164509 d:\facultad\algoritmos\parciales hechos\parciallista1-12-25\trabajopractico\arbol.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1782165858 source:d:\facultad\algoritmos\parciales hechos\parciallista1-12-25\trabajopractico\utils.c
+	"utils.h"
+
+1782164589 d:\facultad\algoritmos\parciales hechos\parciallista1-12-25\trabajopractico\utils.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"indice.h"
+
+1782164064 source:d:\facultad\algoritmos\parciales hechos\parciallista1-12-25\trabajopractico\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"utils.h"
+
