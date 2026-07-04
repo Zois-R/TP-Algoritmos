@@ -1,8 +1,8 @@
 #include "indice.h"
 
 /** \brief
-Inicializa la estructura a Ìndice vacÌo y almacena en la estructura de Ìndice
-el tamaÒo de la clave genÈrica a utilizar y la funciÛn de comparaciÛn
+Inicializa la estructura a √≠ndice vac√≠o y almacena en la estructura de √≠ndice
+el tama√±o de la clave gen√©rica a utilizar y la funci√≥n de comparaci√≥n
  *
  * \param void* const
  * \param void* const
@@ -23,7 +23,7 @@ void ind_crear (t_indice* ind, size_t tam_clave, int (*cmp)(const void*, const v
 
 
 /** \brief  Inserta en orden el registro
-seg˙n la clave
+seg√∫n la clave
  *
  * \param t_indice *
  * \param void*
@@ -35,21 +35,21 @@ int ind_insertar (t_indice* ind, void *clave, unsigned nro_reg)
 {
     t_reg_indice reg;
 
-    // 1. Guardamos el n˙mero de registro directamente en el campo de la estructura
+    // 1. Guardamos el n√∫mero de registro directamente en el campo de la estructura
     reg.nro_registro = nro_reg;
 
-    // 2. Reservamos memoria ⁄NICAMENTE para el tamaÒo de la clave (ej: sizeof(long))
+    // 2. Reservamos memoria √öNICAMENTE para el tama√±o de la clave (ej: sizeof(long))
     reg.clave = malloc(ind->tam_clave);
     if (!reg.clave)
-        return 0; // FallÛ la reserva
+        return 0; // Fall√≥ la reserva
 
     // 3. Copiamos los bytes de la clave original (el DNI) hacia nuestra nueva memoria
     memcpy(reg.clave, clave, ind->tam_clave);
 
-    // 4. Ahora sÌ, le mandamos nuestra estructura terminada al ·rbol genÈrico
+    // 4. Ahora s√≠, le mandamos nuestra estructura terminada al √°rbol gen√©rico
     int estado_insercion = insentar_en_arbol(&ind->arbol, &reg, sizeof(t_reg_indice), ind->cmp);
 
-    // Si el ·rbol rebotÛ la inserciÛn (ej: clave duplicada), liberamos la memoria que pedimos
+    // Si el √°rbol rebot√≥ la inserci√≥n (ej: clave duplicada), liberamos la memoria que pedimos
     if (estado_insercion == 0) {
         free(reg.clave);
     }
@@ -58,11 +58,38 @@ int ind_insertar (t_indice* ind, void *clave, unsigned nro_reg)
 }
 
 
+int ind_eliminar(t_indice* ind, void *clave, unsigned *nro_reg)
+{
+    t_reg_indice reg_elim;
+    reg_elim.clave = clave;
 
+    if(elim_elem_arbol(&ind->arbol,&reg_elim,sizeof(t_reg_indice),ind->cmp)== 0)
+        return 0;
+    *nro_reg= reg_elim.nro_registro;
+    free(reg.clave);
+    return 1;
+}
+int ind_buscar (const t_indice* ind, void *clave, unsigned *nro_reg)
+{
+    t_reg_indice reg_buscar;
+    reg_buscar.clave = clave;
+
+    if(buscar_elem_arbol(&ind->arbol,&reg_buscar,sizeof(t_reg_indice),ind->cmp)== 0)
+        return 0;
+    *nro_reg= reg_buscar.nro_registro;
+    return 1;
+}
+
+int ind_cargar (t_indice* ind, const char* path)
+{
+    if(cargar_arch_bin_ord(&(ind->arbol),path,sizeof(t_reg_indice)) == 0)
+        return 0;
+    return 1;
+}
 
 /** \brief
  Graba un archivo binario ordenado
-(tÌpicamente de extensiÛn ë.idxí) con el contenido del Ìndice con la estructura clave-nro_reg.
+(t√≠picamente de extensi√≥n ‚Äò.idx‚Äô) con el contenido del √≠ndice con la estructura clave-nro_reg.
 
  *
  * \param const t_indice* ind
@@ -80,11 +107,11 @@ int ind_grabar (const t_indice* ind, const char* path)
 
 /**
 Inserta en orden el registro
-seg˙n la clave.
+seg√∫n la clave.
 
 
 int ind_insertar (t_indice* ind, void *clave, unsigned nro_reg): inserta en orden el registro
-seg˙n la clave.
+seg√∫n la clave.
 */
 
 //int ind_insertar(t_indice* ind, void *clave, unsigned nro_reg)
@@ -129,8 +156,8 @@ seg˙n la clave.
 
 
 /**
-int ind_eliminar (t_indice* ind, void *clave, unsigned *nro_reg): elimina la entrada del Ìndice
-correspondiente a la clave y devuelve en nro_reg el n˙mero de registro asociado.
+int ind_eliminar (t_indice* ind, void *clave, unsigned *nro_reg): elimina la entrada del √≠ndice
+correspondiente a la clave y devuelve en nro_reg el n√∫mero de registro asociado.
 
 */
 //int ind_eliminar (t_indice* ind, void *clave, unsigned *nro_reg)
@@ -144,14 +171,14 @@ correspondiente a la clave y devuelve en nro_reg el n˙mero de registro asociado.
 //#include "indice.h"
 //
 ///*
-//    Variable auxiliar para poder usar el comparador del Ìndice
-//    dentro del comparador que recibe el ·rbol.
+//    Variable auxiliar para poder usar el comparador del √≠ndice
+//    dentro del comparador que recibe el √°rbol.
 //*/
 //static int (*cmp_clave_indice)(const void*, const void*) = NULL;
 //
 //
 ///*
-//    Compara dos registros de Ìndice usando solamente la clave.
+//    Compara dos registros de √≠ndice usando solamente la clave.
 //*/
 //static int cmp_reg_indice(const void* v1, const void* v2)
 //{
@@ -163,7 +190,7 @@ correspondiente a la clave y devuelve en nro_reg el n˙mero de registro asociado.
 //
 //
 ///*
-//    Crea un registro temporal de Ìndice.
+//    Crea un registro temporal de √≠ndice.
 //    Sirve para insertar, buscar o eliminar.
 //*/
 //static t_reg_indice* crear_reg_indice(const t_indice* ind,
@@ -190,7 +217,7 @@ correspondiente a la clave y devuelve en nro_reg el n˙mero de registro asociado.
 //
 //
 ///*
-//    Inicializa el Ìndice vacÌo.
+//    Inicializa el √≠ndice vac√≠o.
 //*/
 //void ind_crear(t_indice* ind, size_t tam_clave, int (*cmp)(const void*, const void*))
 //{
@@ -204,7 +231,7 @@ correspondiente a la clave y devuelve en nro_reg el n˙mero de registro asociado.
 //
 //
 ///*
-//    Inserta una entrada en el Ìndice:
+//    Inserta una entrada en el √≠ndice:
 //    clave + nro_reg.
 //*/
 //int ind_insertar(t_indice* ind, void *clave, unsigned nro_reg)
@@ -236,7 +263,7 @@ correspondiente a la clave y devuelve en nro_reg el n˙mero de registro asociado.
 //
 //
 ///*
-//    Busca una clave en el Ìndice.
+//    Busca una clave en el √≠ndice.
 //    Si la encuentra, devuelve el nro_reg asociado.
 //*/
 //int ind_buscar(const t_indice* ind, void *clave, unsigned *nro_reg)
@@ -274,8 +301,8 @@ correspondiente a la clave y devuelve en nro_reg el n˙mero de registro asociado.
 //
 //
 ///*
-//    Elimina una clave del Ìndice.
-//    Si la elimina, devuelve el nro_reg que tenÌa asociado.
+//    Elimina una clave del √≠ndice.
+//    Si la elimina, devuelve el nro_reg que ten√≠a asociado.
 //*/
 //int ind_eliminar(t_indice* ind, void *clave, unsigned *nro_reg)
 //{
@@ -312,7 +339,7 @@ correspondiente a la clave y devuelve en nro_reg el n˙mero de registro asociado.
 //
 //
 ///*
-//    Estructura auxiliar para grabar el Ìndice.
+//    Estructura auxiliar para grabar el √≠ndice.
 //*/
 //typedef struct
 //{
@@ -323,12 +350,12 @@ correspondiente a la clave y devuelve en nro_reg el n˙mero de registro asociado.
 //
 //
 ///*
-//    AcciÛn ejecutada por cada nodo del ·rbol al grabar.
+//    Acci√≥n ejecutada por cada nodo del √°rbol al grabar.
 //    Graba en formato:
 //        clave
 //        nro_reg
 //*/
-//static void accion_grabar_indice(void* info, /// ESTA FUNCI”N TIENE EN CUENTA QUE EL ARCHIVO SE ABRÕO ANTES
+//static void accion_grabar_indice(void* info, /// ESTA FUNCI√ìN TIENE EN CUENTA QUE EL ARCHIVO SE ABR√çO ANTES
 //                                 unsigned tamInfo,
 //                                 unsigned nivel,
 //                                 void* params) /// PARA QUE SIRVE?
@@ -354,7 +381,7 @@ correspondiente a la clave y devuelve en nro_reg el n˙mero de registro asociado.
 //
 //
 ///*
-//    Graba el Ìndice en un archivo binario ordenado.
+//    Graba el √≠ndice en un archivo binario ordenado.
 //    El recorrido en orden del ABB permite guardar las claves ordenadas.
 //*/
 //int ind_grabar(const t_indice* ind, const char* path)
@@ -384,7 +411,7 @@ correspondiente a la clave y devuelve en nro_reg el n˙mero de registro asociado.
 //
 //
 ///*
-//    Carga el Ìndice desde un archivo binario.
+//    Carga el √≠ndice desde un archivo binario.
 //    El archivo debe tener registros con formato:
 //        clave
 //        nro_reg
@@ -435,7 +462,7 @@ correspondiente a la clave y devuelve en nro_reg el n˙mero de registro asociado.
 //
 //
 ///*
-//    VacÌa el Ìndice en memoria.
+//    Vac√≠a el √≠ndice en memoria.
 //*/
 //void ind_vaciar(t_indice* ind)
 //{
@@ -447,7 +474,7 @@ correspondiente a la clave y devuelve en nro_reg el n˙mero de registro asociado.
 //
 //
 ///*
-//    Estructura auxiliar para recorrer el Ìndice.
+//    Estructura auxiliar para recorrer el √≠ndice.
 //*/
 //typedef struct
 //{
@@ -457,8 +484,8 @@ correspondiente a la clave y devuelve en nro_reg el n˙mero de registro asociado.
 //
 //
 ///*
-//    AcciÛn interna del ·rbol.
-//    Traduce el nodo del ·rbol al callback p˙blico del Ìndice.
+//    Acci√≥n interna del √°rbol.
+//    Traduce el nodo del √°rbol al callback p√∫blico del √≠ndice.
 //*/
 //static void accion_recorrer_indice(void* info,
 //                                   unsigned tamInfo,
@@ -473,7 +500,7 @@ correspondiente a la clave y devuelve en nro_reg el n˙mero de registro asociado.
 //
 //
 ///*
-//    Recorre el Ìndice en orden.
+//    Recorre el √≠ndice en orden.
 //*/
 //int ind_recorrer(const t_indice* ind,
 //                 void (*accion)(const void *, unsigned, void *),
@@ -495,8 +522,8 @@ correspondiente a la clave y devuelve en nro_reg el n˙mero de registro asociado.
 //}
 
 /** \brief
- * Recorre el Ìndice en orden y llama a acciÛn para cada registro del mismo.
-  Devuelve 1 (uno) si la operaciÛn fue exitosa y 0 (cero) en caso contrario.
+ * Recorre el √≠ndice en orden y llama a acci√≥n para cada registro del mismo.
+  Devuelve 1 (uno) si la operaci√≥n fue exitosa y 0 (cero) en caso contrario.
  * \param  const void*
  * \param unsigned
  * \param  void*
