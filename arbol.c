@@ -40,7 +40,7 @@ int insentar_en_arbol(t_arbol *pa, const void *dato,unsigned tam_dato,int (*cmp)
 
 
 
-int cargar_desde_set_ordenado_a_arbol(t_arbol *pa, void *set_datos, int li, int ls, unsigned (*leer)(void *,void*,unsigned, void *params),
+int cargar_desde_set_ordenado_a_arbol(t_arbol *pa, void *set_datos, int li, int ls, unsigned (*leer)(void **,void*,unsigned, void *params),
                                       void *params )
 {
     int m = (li + ls)/2, r;
