@@ -29,5 +29,8 @@ void ind_crear (t_indice* ind, size_t tam_clave, int (*cmp)(const void*, const v
 int ind_insertar (t_indice* ind, void *clave, unsigned nro_reg);
 int ind_grabar (const t_indice* ind, const char* path);
 
+int ind_recorrer (const t_indice* ind, void (*accion)(const void *, unsigned, void *),
+                  void*param);
+
 
 #endif // INDICE_H_INCLUDED

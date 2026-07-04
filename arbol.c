@@ -32,7 +32,7 @@ int insentar_en_arbol(t_arbol *pa, const void *dato,unsigned tam_dato,int (*cmp)
     nue->tam_info = tam_dato;
     nue->izq = NULL;
     nue->der = NULL;
-    *pa = NULL;
+    *pa = nue;
     return TODO_OK;
 
 
@@ -56,7 +56,7 @@ int cargar_desde_set_ordenado_a_arbol(t_arbol *pa, void *set_datos, int li, int 
     }
     (*pa)->izq = (*pa)->der = NULL;
 
-    if(r = cargar_desde_set_ordenado_a_arbol(&(*pa)->izq,set_datos,li,m-1,leer,params))
+    if( (r = cargar_desde_set_ordenado_a_arbol(&(*pa)->izq,set_datos,li,m-1,leer,params)))
     {
         return r;
     }
@@ -78,13 +78,29 @@ unsigned leer_desde_arch_bin(void **info_nodo, void *pf, unsigned pos, void *par
 
 
 
-void recorrer_en_orden(t_arbol *pa, unsigned n, void *params, void (*accion)(void *,unsigned, unsigned , void *))
+void recorrer_en_orden(t_arbol *pa, unsigned n, void *params,
+                        void (*accion)(const void *, unsigned, void *))
 {
     if(!*pa)
         return;
 
+    recorrer_en_orden(&(*pa)->izq, n + 1, params, accion);
 
-    recorrer_en_orden(&(*pa)->izq,n+1,params,accion);
-    accion((*pa)->info,(*pa)->tam_info,n,params);
-    recorrer_en_orden(&(*pa)->der,n+1,params,accion);
+
+    accion((*pa)->info, (*pa)->tam_info, params);
+
+    recorrer_en_orden(&(*pa)->der, n + 1, params, accion);
+}
+
+
+void recorrer_en_pre_orden(t_arbol *pa, unsigned n, void *params,
+                        void (*accion)(const void *, unsigned, void *))
+{
+    if(!*pa)
+        return;
+
+    accion((*pa)->info, (*pa)->tam_info, params);
+    recorrer_en_pre_orden(&(*pa)->izq, n + 1, params, accion);
+    recorrer_en_pre_orden(&(*pa)->der, n + 1, params, accion);
+
 }

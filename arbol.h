@@ -26,6 +26,11 @@ int cargar_desde_set_ordenado_a_arbol(t_arbol *pa, void *set_datos, int li, int 
 unsigned leer_desde_arch_bin(void **info_nodo, void *pf, unsigned m, void *params); //params es el tam_registro
 
 
-void recorrer_en_orden(t_arbol *pa, unsigned n, void *params, void (*accion)(void *,unsigned, unsigned , void *));
 
+
+void recorrer_en_orden(t_arbol *pa, unsigned n, void *params,
+                        void (*accion)(const void *, unsigned, void *));
+
+void recorrer_en_pre_orden(t_arbol *pa, unsigned n, void *params,
+                        void (*accion)(const void *, unsigned, void *));
 #endif // ARBOL_H_INCLUDED

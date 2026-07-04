@@ -39,9 +39,10 @@ void leer_archivo_binario(const char *nombre_arch);
 void mostrar_menu(t_indice *pi, const char* pathSocio);
 int cmp_clave(const void *a, const void *b);
 
+int crear_indice_socios_desde_arch_maestro(t_indice *pi,const char *path);
 
-void mostrar_clave(void *clave, unsigned n, unsigned tam_clave, void *params);
 
+void mostrar_clave(const void *info_nodo, unsigned tam_info, void *params);
 
 
 #endif // UTILS_H_INCLUDED

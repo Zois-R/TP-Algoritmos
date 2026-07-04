@@ -107,7 +107,7 @@ void leer_archivo_binario(const char *nombre_arch)
 }
 
 
-int cmp_clave(const void *a, const void *b)
+int cmp_clave(const void *info_arbol1, const void *info_arbol2)
 {
 
     // 1. El árbol nos pasa las cajas genéricas. Nosotros sabemos que son t_reg_indice.
@@ -198,8 +198,21 @@ void mostrar_menu(t_indice *pi, const char* path)
 
 
 
-
-void mostrar_clave(void *clave, unsigned n, unsigned tam_clave, void *params)
+void mostrar_clave(const void *info_nodo, unsigned tam_info, void *params)
 {
-    t
+
+    t_reg_indice *reg = (t_reg_indice *)info_nodo;
+
+
+    long dni_real = *(long*)(reg->clave);
+
+
+    printf("DNI: %ld | Nro de Registro: %u\n", dni_real, reg->nro_registro);
 }
+
+
+
+
+//
+//
+//int guardar_arbol_indice_archivo_idx(t_indice *pi)
