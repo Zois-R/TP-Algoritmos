@@ -6,7 +6,7 @@
 int main()
 {
     char path[256];
-
+    t_indice indice_socios;
     printf("Ingrese el path (ruta de acceso) del archivo CSV de socios sin comillas ni nada: ");
 
 
@@ -20,14 +20,17 @@ int main()
 
         printf("Lectura finalizada. Se genero el archivo socios.dat (si la ruta era correcta).\n");
     }
-    leer_archivo_binario("socios.dat");
+    leer_archivo_binario("socios.dat"); // TESTING
 
-    /**
-    Construir, además, un índice donde la clave sea el DNI del Socio, y el número de registro (unsigned
-nro_reg) que le corresponde a ese socio en el archivo.
-Antes de finalizar el programa, guardar el índice generado en el archivo “socios.idx”.
+    ind_crear(&indice_socios,sizeof(long),cmp_clave);
+
+    crear_indice_socios_desde_arch_maestro(&indice_socios,"socios.dat");
+
+    printf("\n\nMOSTRANDO ARBOL:\n\n");
+    ind_recorrer(&indice_socios,mostrar_clave,NULL); // TESTING
 
 
-    */
-
+    mostrar_menu(&indice_socios,"socios.dat");
 }
+
+

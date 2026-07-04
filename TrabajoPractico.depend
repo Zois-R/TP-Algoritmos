@@ -31,3 +31,45 @@
 	<string.h>
 	"utils.h"
 
+1783194543 source:d:\facultad\algoritmos\trabajopractico\arbol.c
+	"arbol.h"
+
+1783194543 d:\facultad\algoritmos\trabajopractico\arbol.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1783194447 source:d:\facultad\algoritmos\trabajopractico\utils.c
+	"utils.h"
+
+1783194447 d:\facultad\algoritmos\trabajopractico\utils.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"indice.h"
+
+1783193892 d:\facultad\algoritmos\trabajopractico\indice.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"arbol.h"
+
+1783192660 source:d:\facultad\algoritmos\trabajopractico\socio.c
+	"socio.h"
+
+1783194574 source:d:\facultad\algoritmos\trabajopractico\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"utils.h"
+
+1783194543 source:d:\facultad\algoritmos\trabajopractico\indice.c
+	"indice.h"
+
+1783193203 d:\facultad\algoritmos\trabajopractico\socio.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"indice.h"
+	"utils.h"
+

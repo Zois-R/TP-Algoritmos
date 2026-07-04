@@ -42,6 +42,10 @@
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="socio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="socio.h" />
 		<Unit filename="utils.c">
 			<Option compilerVar="CC" />
 		</Unit>
