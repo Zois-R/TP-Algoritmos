@@ -31,7 +31,7 @@
 	<string.h>
 	"utils.h"
 
-1783194543 source:d:\facultad\algoritmos\trabajopractico\arbol.c
+1783194621 source:d:\facultad\algoritmos\trabajopractico\arbol.c
 	"arbol.h"
 
 1783194543 d:\facultad\algoritmos\trabajopractico\arbol.h
@@ -57,7 +57,7 @@
 1783192660 source:d:\facultad\algoritmos\trabajopractico\socio.c
 	"socio.h"
 
-1783194574 source:d:\facultad\algoritmos\trabajopractico\main.c
+1783194938 source:d:\facultad\algoritmos\trabajopractico\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>

@@ -191,5 +191,28 @@ t_nodo_arbol ** buscar_nodo_arbol (const t_arbol *pa, const void *dato,
 }
 
 
+// Función recursiva en post-orden para liberar los nodos del árbol y sus mallocs internos
+void vaciar_arbol_nodos(t_arbol *pa)
+{
+    if (!*pa) return;
+
+    vaciar_arbol_nodos(&(*pa)->izq);
+    vaciar_arbol_nodos(&(*pa)->der);
+
+    t_reg_indice *reg = (t_reg_indice *)(*pa)->info;
+    if (reg)
+    {
+        if (reg->clave) free(reg->clave); // Liberamos el malloc del DNI
+        free(reg);                        // Liberamos el malloc del t_reg_indice
+    }
+    free(*pa);                            // Liberamos el nodo del árbol
+    *pa = NULL;
+}
+
+void ind_vaciar (t_indice* ind)
+{
+    if (!ind) return;
+    vaciar_arbol_nodos(&ind->arbol);
+}
 
 
