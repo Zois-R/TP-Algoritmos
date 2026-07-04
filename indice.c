@@ -80,12 +80,6 @@ int ind_buscar (const t_indice* ind, void *clave, unsigned *nro_reg)
     return 1;
 }
 
-int ind_cargar (t_indice* ind, const char* path)
-{
-    if(cargar_arch_bin_ord(&(ind->arbol),path,sizeof(t_reg_indice)) == 0)
-        return 0;
-    return 1;
-}
 
 /** \brief
  Graba un archivo binario ordenado
