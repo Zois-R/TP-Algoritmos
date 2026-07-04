@@ -76,7 +76,20 @@ unsigned leer_desde_arch_bin(void **info_nodo, void *pf, unsigned pos, void *par
     return fread(*info_nodo,tam,1,(FILE*)pf);
 }
 
-
+int cargar_arch_bin_ord (t_arbol *pa, const char *path, unsigned tam_dato)
+{
+    int cant_reg, r;
+    FILE *pf;
+    if(*pa)
+        return 0;
+    if(!(pf=fopen(path,"rb")))
+        return 0;
+    fseek(pf,0L, SEEK_END);
+    cant_reg=ftell(pf)/tam_dato;
+    r= cargar_desde_set_ordenado_a_arbol(pa, pf, 0, cant_reg-1, leer_desde_arch_bin, &tam_dato);
+    fclose(pf);
+    return r;
+}
 
 void recorrer_en_orden(t_arbol *pa, unsigned n, void *params, void (*accion)(void *,unsigned, unsigned , void *))
 {
@@ -88,3 +101,22 @@ void recorrer_en_orden(t_arbol *pa, unsigned n, void *params, void (*accion)(voi
     accion((*pa)->info,(*pa)->tam_info,n,params);
     recorrer_en_orden(&(*pa)->der,n+1,params,accion);
 }
+
+
+
+int cargar_arch_bin_ord (t_arbol *pa, const char *path, unsigned tam_dato)
+{
+    int cant_reg, r;
+    FILE *pf;
+    if(*pa)
+        return 0;
+    if(!(pf=fopen(path,"rb")))
+        return 0;
+    fseek(pf,0L, SEEK_END);
+    cant_reg=ftell(pf)/tam_dato;
+    r= cargar_desde_set_ordenado_a_arbol(pa, pf, 0, cant_reg-1, leer_desde_arch_bin, &tam_dato);
+    fclose(pf);
+    return r;
+}
+
+
