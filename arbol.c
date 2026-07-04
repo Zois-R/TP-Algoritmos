@@ -120,3 +120,89 @@ int cargar_arch_bin_ord (t_arbol *pa, const char *path, unsigned tam_dato)
 }
 
 
+
+int elim_elem_arbol (t_arbol *pa, void *dato, unsigned tam_dato, int(*cmp)(const void*, const void*))
+{
+    if(!(pa=buscar_nodo_arbol (pa,dato,cmp)))
+       return 0;
+    memcpy(dato, (*pa)->info, MIN(tam_dato, (*pa)->tam_info));
+    return eliminar_raiz_arbol(pa);
+}
+int buscar_elem_arbol (const t_arbol *pa, void *dato, unsigned tam_dato, int(*cmp)(const void*,const void*))
+{
+    if(!(pa=buscar_nodo_arbol(pa,dato,cmp)))
+        return 0;
+    memcpy(dato,(*pa)->info,MIN(tam_dato,(*pa)->tam_info));
+    return 1;
+}
+
+int eliminar_raiz_arbol(t_arbol *pa)
+{
+    t_nodo_arbol **remp, *elim;
+    if(!*pa)
+        return 0;
+    free((*pa)->info);
+    if(!(*pa)->izq && !(*pa)->der)
+    {
+        free(*pa);
+        *pa=NULL;
+        return 1;
+    }
+    remp= altura_arbol(&(*pa)->izq)> altura_arbol(&(*pa)->der)?
+            mayor_nodo_arbol(&(*pa)->izq): menor_nodo_arbol(&(*pa)->der);
+    elim=*remp;
+    (*pa)->info=elim->info;
+    (*pa)->tam_info=elim->tam_info;
+    *remp=elim->izq? elim->izq : elim ->der;
+    free(elim);
+    return 1;
+}
+
+unsigned altura_arbol (const t_arbol *pa)
+{
+    int hi,hd;
+    if(!(*pa))
+        return 0;
+    hi=altura_arbol(&(*pa)->izq);
+    hd=altura_arbol(&(*pa)->der);
+    return (hi>hd? hi:hd)+1;
+}
+
+t_nodo_arbol ** mayor_nodo_arbol (const t_arbol *pa)
+{
+    if(!(*pa))
+        return NULL;
+    while ((*pa)->der)
+        pa=&(*pa)->der;
+    return (t_nodo_arbol**)pa;
+}
+
+t_nodo_arbol ** menor_nodo_arbol (const t_arbol *pa)
+{
+    if(!(*pa))
+        return NULL;
+    while ((*pa)->izq)
+        pa=&(*pa)->izq;
+    return (t_nodo_arbol**)pa;
+}
+
+
+t_nodo_arbol ** buscar_nodo_arbol (const t_arbol *pa, const void *dato,
+                                   int(*cmp)(const void*, const void*))
+{
+    int rc;
+    while(*pa && (rc=cmp(dato,(*pa)->info)))
+    {
+        if(rc<0)
+            pa=&(*pa)->izq;
+        else
+            pa=&(*pa)->der;
+    }
+    if(!*pa)
+        return NULL;
+    return (t_nodo_arbol **)pa;
+}
+
+
+
+
