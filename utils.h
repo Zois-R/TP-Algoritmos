@@ -44,6 +44,7 @@ int crear_indice_socios_desde_arch_maestro(t_indice *pi,const char *path);
 
 
 void mostrar_clave(const void *info_nodo, unsigned tam_info, void *params);
+void test_leer_archivo_idx(const char *nombre_arch);
 
 
 #endif // UTILS_H_INCLUDED

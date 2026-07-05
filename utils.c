@@ -132,7 +132,7 @@ int crear_indice_socios_desde_arch_maestro(t_indice *pi,const char *path)
     while(!feof(pf))
     {
         // Solo insertamos en el árbol a los que NO están dados de baja
-        if (socio.estado != 'B') {
+        if (socio.estado != 'I') {
             ind_insertar(pi, &socio.dni, nro_reg);
         }
         nro_reg++;
@@ -140,13 +140,13 @@ int crear_indice_socios_desde_arch_maestro(t_indice *pi,const char *path)
     }
 
     fclose(pf);
-    return TODO_OK;
+    return 1;
 }
 
 void mostrar_menu()
 {
 
-        system("cls");
+        //system("cls");
         printf("\nMenu:\n");
         printf("(A) Alta de nuevo socio\n");
         printf("(M) Modificar socio\n");
@@ -165,11 +165,11 @@ void menu(t_indice *pi, const char* path)
     char opcion;
     do
     {
-        system("cls");
+        //system("cls");
         mostrar_menu();
         scanf(" %c", &opcion);
 
-        switch(TO_LOWER(opcion))
+        switch(tolower(opcion))
         {
             case 'a':
                 alta_socio(pi,path);
@@ -194,7 +194,7 @@ void menu(t_indice *pi, const char* path)
                 break;
         }
         system("pause");
-    } while(TO_LOWER(opcion) != 's');
+    } while(tolower(opcion) != 's');
 }
 
 
@@ -211,6 +211,46 @@ void mostrar_clave(const void *info_nodo, unsigned tam_info, void *params)
 
     // 3. Imprimimos los datos limpios
     printf("DNI: %ld | Nro de Registro: %u\n", dni_real, nro_reg);
+}
+
+
+
+void test_leer_archivo_idx(const char *nombre_arch)
+{
+    FILE *pf_idx = fopen(nombre_arch, "rb");
+    if (!pf_idx)
+    {
+        printf("Error: No se pudo abrir el archivo %s (quizas no se creo todavia).\n", nombre_arch);
+        return;
+    }
+
+    long dni;
+    unsigned nro_reg;
+    int contador = 0;
+
+    printf("\n======================================================\n");
+    printf("        TESTING: LEYENDO ARCHIVO INDICE (.idx)        \n");
+    printf("======================================================\n");
+    printf("| %-5s | %-12s | %-22s |\n", "Nro", "DNI", "POSICION (nro_reg)");
+    printf("------------------------------------------------------\n");
+
+    // Como guardamos la memoria plana, leemos exactamente la cantidad
+    // de bytes del DNI, y si tiene éxito, leemos los bytes del nro_reg.
+    while (fread(&dni, sizeof(long), 1, pf_idx) == 1 &&
+           fread(&nro_reg, sizeof(unsigned), 1, pf_idx) == 1)
+    {
+        contador++;
+        printf("| %-5d | %-12ld | %-22u |\n", contador, dni, nro_reg);
+    }
+
+    printf("======================================================\n");
+    if (contador == 0) {
+        printf("El archivo esta vacio.\n");
+    } else {
+        printf("Total: %d registros en el indice.\n", contador);
+    }
+
+    fclose(pf_idx);
 }
 
 

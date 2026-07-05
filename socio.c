@@ -47,7 +47,7 @@ void alta_socio(t_indice *pi, const char* path_archivo)
     t_socio socio;
     int estado_busqueda;
 
-    // 1. Bucle de validación del DNI (atrapamos al usuario hasta que ingrese uno válido)
+
     do
     {
         printf("\n--- ALTA DE NUEVO SOCIO ---\n");
@@ -55,13 +55,13 @@ void alta_socio(t_indice *pi, const char* path_archivo)
         scanf("%ld", &dni_ingresado);
 
         if (dni_ingresado == 0) {
-            return; // El usuario se arrepintió, salimos de la función
+            return;
         }
 
-        // Buscamos si el DNI ya existe en el índice
+
         estado_busqueda = ind_buscar(pi, &dni_ingresado, &nro_reg);
 
-        if (estado_busqueda == 1) { // 1 = TODO_OK / Lo encontró
+        if (estado_busqueda == 1) {
             printf("Error: El DNI %ld ya se encuentra registrado y activo en el club.\n", dni_ingresado);
         }
 
@@ -94,9 +94,8 @@ void alta_socio(t_indice *pi, const char* path_archivo)
     printf("Ingrese Fecha de ultima cuota paga (DD/MM/AAAA): ");
     scanf("%d/%d/%d", &socio.fecha_ultima_cuota.dia, &socio.fecha_ultima_cuota.mes, &socio.fecha_ultima_cuota.anio);
 
-    socio.estado = 'A'; // Forzamos el estado activo
+    socio.estado = 'A';
 
-    // 3. Abrimos y guardamos físicamente en el disco
     FILE* pf;
     if (!(pf = fopen(path_archivo, "ab"))) {
         printf("Error fatal al intentar abrir la base de datos.\n");
@@ -143,13 +142,13 @@ void modificar_socio(t_indice *pi, const char* path_archivo)
         }
     } while (1);
 
-    // 2. Leemos el socio desde el disco rígido a la memoria RAM
+
     if (!leer_socio(nro_reg, &socio, path_archivo)) {
         printf("Error fatal al intentar leer el disco físico.\n");
         return;
     }
 
-    // 3. Sub-menú de modificación con validaciones
+
     do
     {
         system("cls"); // Limpiamos pantalla para que quede prolijo
@@ -274,12 +273,12 @@ void baja_socio(t_indice *pi, const char* path_archivo)
         return;
     }
 
-    // Saltamos a la posición y leemos (el fseek avanza el cabezal)
+
     fseek(pf, nro_reg * sizeof(t_socio), SEEK_SET);
     fread(&socio, sizeof(t_socio), 1, pf);
 
     // Cambiamos estado y fecha
-    socio.estado = 'B';
+    socio.estado = 'I';
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
     socio.fecha_baja.dia = tm.tm_mday;
@@ -296,7 +295,7 @@ void baja_socio(t_indice *pi, const char* path_archivo)
     // 3. Lo eliminamos del índice en RAM para que "deje de existir"
     ind_eliminar(pi, &dni_baja, &nro_reg);
 
-    printf("\n¡Socio dado de baja exitosamente!\n");
+    printf("\nSocio dado de baja exitosamente!\n");
 }
 
 void listar_socios(t_indice *pi, const char* path_archivo)
@@ -308,7 +307,6 @@ void listar_socios(t_indice *pi, const char* path_archivo)
     printf("| %-9s | %-15s | %-15s | %-11s | %-10s |\n", "DNI", "APELLIDOS", "NOMBRES", "CATEGORIA", "ULT. CUOTA");
     printf("-------------------------------------------------------------------------------\n");
 
-    // Llamamos al recorrido en in-orden. Le pasamos la ruta del archivo como "mochila" (params)
     ind_recorrer(pi, accion_listar_socio, (void*)path_archivo);
 
     printf("===============================================================================\n");
@@ -329,7 +327,7 @@ int compactar_y_reindexar(t_indice *pi, const char *path)
     t_socio socio;
     while (fread(&socio, sizeof(t_socio), 1, pf_orig) == 1)
     {
-        if (socio.estado != 'B') {
+        if (socio.estado != 'I') {
             fwrite(&socio, sizeof(t_socio), 1, pf_tmp);
         }
     }
@@ -340,7 +338,7 @@ int compactar_y_reindexar(t_indice *pi, const char *path)
     remove(path);
     rename("socios.tmp", path);
 
-    // Vaciamos la memoria RAM y recargamos
+
     ind_vaciar(pi);
     ind_crear(pi, sizeof(long), pi->cmp); // Reinicializamos el buffer
     crear_indice_socios_desde_arch_maestro(pi, path);

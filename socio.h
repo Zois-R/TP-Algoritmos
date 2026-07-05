@@ -9,8 +9,6 @@
 #include "utils.h"
 
 
-
-
 void accion_listar_socio(const void *info_nodo, unsigned tam_info, void *params);
 int leer_socio(unsigned nro_reg, t_socio *socio, const char* path);
 

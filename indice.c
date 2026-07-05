@@ -64,7 +64,7 @@ int ind_insertar (t_indice* ind, void *clave, unsigned nro_reg)
 // Pasamos el FILE* directamente por params.
 
 
-int ind_grabar (const t_indice* ind, const char* path)
+int ind_grabar(const t_indice* ind, const char* path)
 {
     FILE *fp = fopen(path, "wb");
     if (!fp) return 0;
@@ -157,4 +157,39 @@ void ind_vaciar(t_indice* ind)
         free(ind->reg_indice);
         ind->reg_indice = NULL;
     }
+}
+
+
+
+int ind_cargar(t_indice *ind, const char *path)
+{
+    FILE *pf = fopen(path, "rb");
+    if (!pf) return 0; // Control de seguridad por si falla la apertura
+
+    // 1. Calculamos el tamaño del bloque contiguo (DNI + Nro_Reg)
+    int tam_registro = ind->tam_clave + sizeof(unsigned);
+
+    // 2. Calculamos cuántos registros hay en total viajando al final del archivo
+    fseek(pf, 0, SEEK_END);
+    long bytes_totales = ftell(pf);
+    int cant_registros = bytes_totales / tam_registro;
+
+    if (cant_registros == 0) {
+        fclose(pf);
+        return 0;
+    }
+
+    // 3. Invocamos la función del profesor que arma el árbol balanceado.
+    // Pasamos el Límite Inferior (0) y el Límite Superior (cant_registros - 1).
+    int resultado = cargar_desde_set_ordenado_a_arbol(
+                        &ind->arbol,
+                        pf,
+                        0,
+                        cant_registros - 1,
+                        (unsigned (*)(void *, void *, unsigned int, void *))leer_desde_arch_bin,
+                        &tam_registro
+                    );
+
+    fclose(pf);
+    return resultado == TODO_OK ? 1 : 0;
 }
