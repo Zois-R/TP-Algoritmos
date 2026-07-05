@@ -32,7 +32,7 @@ int main()
 //    ind_recorrer(&indice_socios,mostrar_clave,NULL); // TESTING
 //
 
-    mostrar_menu(&indice_socios,"socios.dat");
+    menu(&indice_socios, "socios.dat");
 }
 
 

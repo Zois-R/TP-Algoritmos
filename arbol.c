@@ -104,3 +104,115 @@ void recorrer_en_pre_orden(t_arbol *pa, unsigned n, void *params,
     recorrer_en_pre_orden(&(*pa)->der, n + 1, params, accion);
 
 }
+
+int eliminar_de_arbol(t_arbol *pa, void* pd, size_t tam, int (*cmp)(const void*, const void*))
+{
+    int comp;
+    // CORRECCIÓN ACÁ: Invertimos pd y (*pa)->info para que busque para el lado correcto
+    while(*pa && (comp = cmp((*pa)->info, pd)))
+    {
+        if(comp < 0)
+            pa = &(*pa)->izq;
+        else
+            pa = &(*pa)->der;
+    }
+
+    if(!*pa)
+        return NO_EXISTE;
+
+    memcpy(pd, (*pa)->info, MINIMO((*pa)->tam_info, tam));
+    return arbol_eliminar_raiz(pa);
+}
+
+void vaciar_arbol(t_arbol *pa)
+{
+    if(!*pa) return;
+
+    // Recorremos en post-orden: primero matamos a los hijos, después al padre
+    vaciar_arbol(&(*pa)->izq);
+    vaciar_arbol(&(*pa)->der);
+
+    free((*pa)->info); // Destruimos el bloque de memoria contigua
+    free(*pa);         // Destruimos el nodo
+
+    *pa = NULL;
+}
+
+
+t_arbol* arbol_mayor_nodo(t_arbol* pa)
+{
+    while(*pa && (*pa)->der)
+        pa = &(*pa)->der;
+    return pa;
+}
+
+t_arbol* arbol_menor_nodo(t_arbol* pa)
+{
+    while(*pa && (*pa)->izq)
+        pa = &(*pa)->izq;
+    return pa;
+}
+
+
+int altura_arbol(const t_arbol *pa)
+{
+    int hi, hd;
+
+    if(!*pa)
+        return 0;
+
+    hi = altura_arbol(&(*pa)->izq);
+    hd = altura_arbol(&(*pa)->der);
+
+    return (hi > hd ? hi : hd) + 1;
+}
+
+
+int arbol_eliminar_raiz(t_arbol *pa)
+{
+    if(!*pa)
+        return NO_EXISTE;
+
+    free((*pa)->info);
+
+    if(!(*pa)->izq && !(*pa)->der)
+    {
+        free(*pa);
+        *pa = NULL;
+        return TODO_OK;
+    }
+
+
+    t_arbol *reemp;
+    t_nodo_arbol *elim;
+
+
+    reemp = altura_arbol(&(*pa)->izq) > altura_arbol(&(*pa)->der) ? arbol_mayor_nodo(&(*pa)->izq) : arbol_menor_nodo(&(*pa)->der);
+
+    elim = *reemp;
+    (*pa)->info = elim->info;
+    (*pa)->tam_info = elim->tam_info;
+    *reemp = elim->izq ? elim->izq: elim->der;
+    free(elim);
+    return TODO_OK;
+}
+
+
+int buscar_en_arbol(const t_arbol *pa, void* pd, size_t tam, int (*cmp)(const void*, const void*))
+{
+    int comp;
+    // CORRECCIÓN ACÁ: Invertimos pd y (*pa)->info
+    while(*pa && (comp = cmp((*pa)->info, pd)))
+    {
+        if(comp < 0)
+            pa = &(*pa)->izq;
+        else
+            pa = &(*pa)->der;
+    }
+
+    if(!*pa)
+        return 0; ///No encontre
+
+    memcpy(pd, (*pa)->info, MINIMO((*pa)->tam_info, tam));
+    return TODO_OK; ///Encontre
+}

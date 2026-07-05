@@ -6,7 +6,6 @@
 #include <string.h>
 #include "indice.h"
 
-
 #define ERR_ARCH 0
 
 // Estructura auxiliar para manejar las fechas
@@ -35,8 +34,10 @@ typedef struct {
 void pasar_archivo_csv_binario(const char *nombre_arch);
 void leer_archivo_binario(const char *nombre_arch);
 
+void mostrar_menu();
 
-void mostrar_menu(t_indice *pi, const char* pathSocio);
+void menu(t_indice *pi, const char* pathSocio);
+
 int cmp_clave(const void *a, const void *b);
 
 int crear_indice_socios_desde_arch_maestro(t_indice *pi,const char *path);

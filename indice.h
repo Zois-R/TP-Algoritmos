@@ -12,15 +12,10 @@
 
 typedef struct {
     t_arbol arbol;
-    size_t tam_clave;                       // Usamos size_t porque así viene por parámetro
+    size_t tam_clave;
     int (*cmp)(const void *, const void*);
+    void *reg_indice;   //El buffer de trabajo contiguo
 } t_indice;
-
-
-typedef struct {
-    void *clave;            // Puntero genérico a la clave (el DNI)
-    unsigned nro_registro;  // La posición física en el archivo .dat
-} t_reg_indice;
 
 
 void ind_crear (t_indice* ind, size_t tam_clave, int (*cmp)(const void*, const void*));
@@ -31,6 +26,10 @@ int ind_grabar (const t_indice* ind, const char* path);
 
 int ind_recorrer (const t_indice* ind, void (*accion)(const void *, unsigned, void *),
                   void*param);
+int ind_grabar (const t_indice* ind, const char* path);
+void accion_grabar_nodo_idx(const void *info_nodo, unsigned tam_info, void *params);
+int ind_buscar(const t_indice* ind, void *clave, unsigned *nro_reg);
+int ind_eliminar(t_indice* ind, void *clave, unsigned *nro_reg);
 
-
+void ind_vaciar(t_indice* ind);
 #endif // INDICE_H_INCLUDED

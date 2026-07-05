@@ -1,5 +1,5 @@
 #include "utils.h"
-
+#include "socio.h"
 
 
 void pasar_archivo_csv_binario(const char *nombre_arch)
@@ -109,19 +109,13 @@ void leer_archivo_binario(const char *nombre_arch)
 
 int cmp_clave(const void *info_arbol1, const void *info_arbol2)
 {
+    // info_arbol1 e info_arbol2 son los bloques contiguos [DNI | NRO_REG]
+    // Como el DNI está al principio, lo casteamos directo a (long*) y lo desreferenciamos.
 
-    // 1. El árbol nos pasa las cajas genéricas. Nosotros sabemos que son t_reg_indice.
-    t_reg_indice *reg1 = (t_reg_indice *)info_arbol1;
-    t_reg_indice *reg2 = (t_reg_indice *)info_arbol2;
+    long dni1 = *(const long*)info_arbol1;
+    long dni2 = *(const long*)info_arbol2;
 
-    // 2. Adentro del registro, la clave es un puntero void*.
-    // Lo casteamos a puntero long y lo desreferenciamos para obtener el número real.
-    long dni1 = *(long*)(reg1->clave);
-    long dni2 = *(long*)(reg2->clave);
-
-    // 3. Comparamos (retorna >0, <0 o 0)
     return dni1 - dni2;
-
 }
 
 
@@ -132,31 +126,26 @@ int crear_indice_socios_desde_arch_maestro(t_indice *pi,const char *path)
     unsigned nro_reg = 0;
 
     pf = fopen(path,"rb");
-
-
-
-    if(!pf)
-        return ERR_ARCH;
+    if(!pf) return ERR_ARCH;
 
     fread(&socio,sizeof(t_socio),1,pf);
     while(!feof(pf))
-        {
-
-            ind_insertar(pi,&socio.dni,nro_reg);
-            nro_reg++;
-            fread(&socio,sizeof(t_socio),1,pf);
+    {
+        // Solo insertamos en el árbol a los que NO están dados de baja
+        if (socio.estado != 'B') {
+            ind_insertar(pi, &socio.dni, nro_reg);
         }
+        nro_reg++;
+        fread(&socio,sizeof(t_socio),1,pf);
+    }
 
     fclose(pf);
     return TODO_OK;
 }
 
-
-void mostrar_menu(t_indice *pi, const char* path)
+void mostrar_menu()
 {
-    char opcion;
-    do
-    {
+
         system("cls");
         printf("\nMenu:\n");
         printf("(A) Alta de nuevo socio\n");
@@ -166,24 +155,36 @@ void mostrar_menu(t_indice *pi, const char* path)
         printf("(C) Compactar y Reindexar\n");
         printf("(S) Salir\n");
         printf("Seleccione una opción: ");
+
+}
+
+
+
+void menu(t_indice *pi, const char* path)
+{
+    char opcion;
+    do
+    {
+        system("cls");
+        mostrar_menu();
         scanf(" %c", &opcion);
 
         switch(TO_LOWER(opcion))
         {
             case 'a':
-
+                alta_socio(pi,path);
                 break;
             case 'm':
-
+                modificar_socio(pi,path);
                 break;
             case 'b':
-
+                baja_socio(pi,path);
                 break;
             case 'l':
-
+                listar_socios(pi,path);
                 break;
-            case 'p':
-
+            case 'c':
+                compactar_y_reindexar(pi,path);
                 break;
             case 's':
                 printf("Saliendo...\n");
@@ -200,19 +201,18 @@ void mostrar_menu(t_indice *pi, const char* path)
 
 void mostrar_clave(const void *info_nodo, unsigned tam_info, void *params)
 {
+    // 1. Extraemos el DNI (está justo al principio del bloque)
+    long dni_real = *(const long*)info_nodo;
 
-    t_reg_indice *reg = (t_reg_indice *)info_nodo;
+    // 2. Extraemos el número de registro.
+    // Casteamos a char* para movernos byte a byte, saltamos los bytes del DNI (sizeof(long)),
+    // y casteamos el resultado a puntero de unsigned para leer el número.
+    unsigned nro_reg = *(const unsigned*)((const char*)info_nodo + sizeof(long));
 
-
-    long dni_real = *(long*)(reg->clave);
-
-
-    printf("DNI: %ld | Nro de Registro: %u\n", dni_real, reg->nro_registro);
+    // 3. Imprimimos los datos limpios
+    printf("DNI: %ld | Nro de Registro: %u\n", dni_real, nro_reg);
 }
 
 
 
 
-//
-//
-//int guardar_arbol_indice_archivo_idx(t_indice *pi)
