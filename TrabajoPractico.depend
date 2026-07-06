@@ -63,7 +63,7 @@
 1783187785 source:d:\facultad\algoritmos\trabajopractico\utils.c
 	"utils.h"
 
-1783274709 source:c:\users\flor\onedrive\escritorio\trabajopractico\arbol.c
+1783310329 source:c:\users\flor\onedrive\escritorio\trabajopractico\arbol.c
 	"arbol.h"
 
 1783228252 c:\users\flor\onedrive\escritorio\trabajopractico\arbol.h
@@ -71,29 +71,29 @@
 	<stdlib.h>
 	<string.h>
 
-1783275830 source:c:\users\flor\onedrive\escritorio\trabajopractico\main.c
+1783276419 source:c:\users\flor\onedrive\escritorio\trabajopractico\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"utils.h"
 
-1783274733 c:\users\flor\onedrive\escritorio\trabajopractico\utils.h
+1783276419 c:\users\flor\onedrive\escritorio\trabajopractico\utils.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"indice.h"
 
-1783272829 c:\users\flor\onedrive\escritorio\trabajopractico\indice.h
+1783276419 c:\users\flor\onedrive\escritorio\trabajopractico\indice.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"arbol.h"
 
-1783273943 source:c:\users\flor\onedrive\escritorio\trabajopractico\socio.c
+1783276419 source:c:\users\flor\onedrive\escritorio\trabajopractico\socio.c
 	"socio.h"
 	<time.h>
 
-1783274794 c:\users\flor\onedrive\escritorio\trabajopractico\socio.h
+1783276419 c:\users\flor\onedrive\escritorio\trabajopractico\socio.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -101,10 +101,10 @@
 	"indice.h"
 	"utils.h"
 
-1783272829 source:c:\users\flor\onedrive\escritorio\trabajopractico\indice.c
+1783276419 source:c:\users\flor\onedrive\escritorio\trabajopractico\indice.c
 	"indice.h"
 
-1783274742 source:c:\users\flor\onedrive\escritorio\trabajopractico\utils.c
+1783276419 source:c:\users\flor\onedrive\escritorio\trabajopractico\utils.c
 	"utils.h"
 	"socio.h"
 

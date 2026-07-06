@@ -10,17 +10,17 @@ int main()
 
     const char *archivo_maestro = "socios.dat";
 
-    // 1. Verificamos si la base de datos principal ya existe
+
     FILE *pf_dat = fopen(archivo_maestro, "rb");
     if (pf_dat != NULL)
     {
-        // El archivo ya existe. Lo cerramos y evitamos pisarlo con el CSV.
+
         fclose(pf_dat);
         printf("-> Base de datos '%s' encontrada. Conservando registros previos.\n", archivo_maestro);
     }
     else
     {
-        // El archivo NO existe. Es el primer arranque, pedimos el CSV.
+
         printf("-> No se encontro la base de datos principal.\n");
         printf("Por favor, ingrese el path del archivo CSV de socios para inicializar el sistema:\n> ");
 
@@ -33,16 +33,16 @@ int main()
         else
         {
             printf("Error al leer el path. Cerrando el programa...\n");
-            return 1; // Salimos con código de error
+            return 1;
         }
     }
 
 
-    //leer_archivo_binario("socios.dat"); // TESTING
 
-    ind_crear(&indice_socios,sizeof(long),cmp_clave); //inicializar estructura indice
 
-    // Consultamos externamente si el archivo .idx ya existe en el disco
+    ind_crear(&indice_socios,sizeof(long),cmp_clave);
+
+
     FILE *pf_idx = fopen("socios.idx", "rb");
 
     if (pf_idx != NULL)
@@ -59,12 +59,6 @@ int main()
         crear_indice_socios_desde_arch_maestro(&indice_socios, "socios.dat");
     }
 
-
-    //    printf("\n\nMOSTRANDO ARBOL:\n\n");
-//    ind_recorrer(&indice_socios,mostrar_clave,NULL); // TESTING
-    //
-
-
     getchar();
     menu(&indice_socios, "socios.dat");
 
@@ -73,7 +67,7 @@ int main()
     leer_archivo_binario("socios.dat");
     ind_grabar(&indice_socios,"socios.idx");
     ind_vaciar(&indice_socios);
-    //test_leer_archivo_idx("socios.idx");
+
 
 }
 

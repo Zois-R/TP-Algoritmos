@@ -56,7 +56,7 @@ int cargar_desde_set_ordenado_a_arbol(t_arbol *pa, void *set_datos, int li, int 
     }
     (*pa)->izq = (*pa)->der = NULL;
 
-    if( (r = cargar_desde_set_ordenado_a_arbol(&(*pa)->izq,set_datos,li,m-1,leer,params)))
+    if( (r = cargar_desde_set_ordenado_a_arbol(&(*pa)->izq,set_datos,li,m-1,leer,params)) != TODO_OK)
     {
         return r;
     }
